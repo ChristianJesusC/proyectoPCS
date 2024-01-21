@@ -1,4 +1,4 @@
-footer {
+.my-footer {
   position: fixed;
   bottom: 0;
   color: rgb(0, 0, 0);
@@ -8,11 +8,24 @@ footer {
   text-align: center;
 }
 
-h3 {
-  font-size: 18px;
-  margin-bottom: 10px;
+.my-container {
+  width: 100%;
+  max-width: 1200px;
+  margin: 0 auto;
 }
 
-p {
-  font-size: 14px;
+.my-row {
+  margin: 0;
+  padding: 0;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.my-col-12 {
+  width: 100%;
+}
+
+.text-center {
+  text-align: center;
 }
