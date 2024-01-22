@@ -1,11 +1,11 @@
 import React, { useState } from "react";
 import estiloLogin from "../css/login.css";
 import { Footer } from "./componentes/FooterWB";
+import axios from "axios";
 
 const Login = () => {
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
-
+  const [correo, setEmail] = useState("");
+  const [contrasena, setPassword] = useState("");
   const handleEmailChange = (event) => {
     setEmail(event.target.value);
   };
@@ -14,15 +14,24 @@ const Login = () => {
     setPassword(event.target.value);
   };
 
-  const handleSubmit = () => {
-    if (email === "jesuschiu@gmail.com" && password === "hola123") {
-      window.location.href = "/inicio";
-
-    } else {
-      alert("error");
+  const handleSubmit = async () => {
+    try {
+      const response = await axios.post("http://localhost:3300/usuarios/login",{
+          correo: correo,
+          contrasena: contrasena,
+        }
+      );
+      if (response.data) {
+        localStorage.setItem("nombre",response.data.nombre)
+        window.location.href = "/inicio";
+      } else {
+        alert("Error de autenticación");
+      }
+    } catch (error) {
+      console.error(error);
+      alert("Error al intentar iniciar sesión");
     }
-  };
-
+  }
   return (
     <div className="login-container">
       <div className="login-form-container">
@@ -31,7 +40,7 @@ const Login = () => {
           <input
             type="text"
             placeholder="Correo electrónico"
-            value={email}
+            value={correo}
             onChange={handleEmailChange}
           />
         </div>
@@ -39,7 +48,7 @@ const Login = () => {
           <input
             type="password"
             placeholder="Contraseña"
-            value={password}
+            value={contrasena}
             onChange={handlePasswordChange}
           />
         </div>
@@ -50,7 +59,7 @@ const Login = () => {
           ¿No tienes una cuenta? <a href="registro">Registrarse</a>
         </p>
       </div>
-      <Footer/>
+      <Footer />
     </div>
   );
 };

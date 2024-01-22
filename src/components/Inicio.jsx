@@ -5,6 +5,8 @@ import { Footer } from './componentes/FooterWB';
 import estilos from "../css/estilos.css"
 
 const Inicio = () => {
+
+
   const redireccional = () => {
     window.location.href = '/chat';
   };
