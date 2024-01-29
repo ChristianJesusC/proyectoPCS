@@ -6,7 +6,7 @@ import moment from "moment";
 import axios from "axios";
 import Header from "./componentes/HeaderWB";
 
-const socket = io("http://localhost:3300");
+const socket = io("http://localhost:3300/chatGlobal");
 
 function Chat() {
   const [nuevoMensaje, setNuevoMensaje] = useState("");
@@ -25,12 +25,14 @@ function Chat() {
   useEffect(() => {
     socket.on("connect", () => setConectado(true));
 
-    socket.on("mensajeChat", (data) => {
+    socket.on("mensajeChatGlobal", (data) => {
       setMensajes((mensajes) => [...mensajes, data]);
     });
 
+    obtenerMensajes();
+
     return () => {
-      socket.off("mensajeChat");
+      socket.off("mensajeChatGlobal");
       socket.off("connect");
     };
   }, []);
@@ -38,6 +40,17 @@ function Chat() {
   useEffect(() => {
     chatRef.current.scrollTop = chatRef.current.scrollHeight;
   }, [mensajes]);
+
+  const obtenerMensajes = () => {
+    axios
+      .get("http://localhost:3300/mensajes/visualizar")
+      .then((response) => {
+        setMensajes(response.data);
+      })
+      .catch((error) => {
+        console.log("Error al obtener los mensajes");
+      });
+  };
 
   const enviarMensaje = () => {
     const fechaHora = new Date();
@@ -49,7 +62,7 @@ function Chat() {
       fecha: fechaHoraFormateada,
     };
 
-    socket.emit("mensajeChat", mensaje);
+    socket.emit("mensajeChatGlobal", mensaje);
     axios
       .post("http://localhost:3300/mensajes/enviar", mensaje)
       .then((response) => {
