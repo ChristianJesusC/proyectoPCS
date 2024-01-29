@@ -13,7 +13,6 @@ const Inicio = () => {
   return (
     <div>
       <Header />
-      <Footer />
     </div>
   );
 };

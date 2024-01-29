@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
-import tablaPuntaje from "../../css/tablaPuntaje.css"
+import "../../css/tablaPuntaje.css";
+import Header from "./HeaderWB";
 
 const LongPollingExample = () => {
   const [puntajes, setPuntajes] = useState([]);
@@ -23,8 +24,6 @@ const LongPollingExample = () => {
       try {
         const res = await fetch("http://localhost:3300/puntaje");
         const data = await res.json();
-
-        // Comprueba si hay nuevos puntajes
         if (data.length > puntajes.length) {
           const nuevosPuntajes = data.slice(puntajes.length);
           setPuntajes((prevPuntajes) => [...prevPuntajes, ...nuevosPuntajes]);
@@ -42,15 +41,26 @@ const LongPollingExample = () => {
   }, [puntajes]);
 
   return (
-    <div className="center-container">
-      <h2>Notificaciones</h2>
-      <ul>
-        {puntajes.map((puntaje) => (
-          <li key={puntaje.id}>
-            {puntaje.nombre} - {puntaje.puntaje}
-          </li>
-        ))}
-      </ul>
+    <div>
+      <Header />
+      <div className="center-container">
+        <table className="score-table">
+          <thead>
+            <tr>
+              <th>Nombre</th>
+              <th>Puntaje</th>
+            </tr>
+          </thead>
+          <tbody>
+            {puntajes.map((puntaje, index) => (
+              <tr key={index}>
+                <td>{puntaje.nombre}</td>
+                <td>{puntaje.puntaje}</td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      </div>
     </div>
   );
 };

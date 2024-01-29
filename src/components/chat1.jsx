@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { Button } from "react-bootstrap";
 import { io } from "socket.io-client";
 import estiloChat from "../css/chat.css";
@@ -14,12 +14,14 @@ function Chat() {
   const [conectado, setConectado] = useState();
   const nombre = localStorage.getItem("nombre");
 
-  useEffect(()=>{
-    if(nombre === null){
-      window.location.href = "/"
+  const chatRef = useRef(null);
+
+  useEffect(() => {
+    if (nombre === null) {
+      window.location.href = "/";
     }
-  },[])
-  
+  }, []);
+
   useEffect(() => {
     socket.on("connect", () => setConectado(true));
 
@@ -32,6 +34,10 @@ function Chat() {
       socket.off("connect");
     };
   }, []);
+
+  useEffect(() => {
+    chatRef.current.scrollTop = chatRef.current.scrollHeight;
+  }, [mensajes]);
 
   const enviarMensaje = () => {
     const fechaHora = new Date();
@@ -52,24 +58,38 @@ function Chat() {
       .catch((error) => {
         console.log("Error al enviar el mensaje");
       });
+
+    setNuevoMensaje("");
   };
 
   return (
     <div>
-      <Header/>
-      <div className="chat">
-        {mensajes.map((mensaje) => (
-          <p
-            className={`mb-2 text-center border-bottom ${
-              mensaje.usuario === nombre ? "mensaje-propio" : ""
-            }`}
-          >
-            {mensaje.usuario}:{mensaje.mensaje}:{mensaje.fecha}
-          </p>
-        ))}
+      <Header />
+      <div className="chat-container">
+        <div className="chat" ref={chatRef}>
+          {mensajes.map((mensaje, index) => (
+            <p
+              key={index}
+              className={`message ${
+                mensaje.usuario === nombre ? "message-own" : "message-incoming"
+              }`}
+            >
+              {mensaje.usuario}:{mensaje.mensaje}:{mensaje.fecha}
+            </p>
+          ))}
+        </div>
+        <div className="input-container">
+          <input
+            type="text"
+            className="message-input"
+            value={nuevoMensaje}
+            onChange={(e) => setNuevoMensaje(e.target.value)}
+          />
+          <Button className="send-button" onClick={enviarMensaje}>
+            Enviar
+          </Button>
+        </div>
       </div>
-      <input type="text" onChange={(e) => setNuevoMensaje(e.target.value)} />
-      <Button onClick={enviarMensaje}>Enviar</Button>
     </div>
   );
 }

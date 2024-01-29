@@ -1,5 +1,5 @@
-import React from 'react';
-import { Button, Container } from 'react-bootstrap';
+import React from "react";
+import { Button, Container } from "react-bootstrap";
 
 function SalaChats() {
   const redireccion1 = () => {
@@ -16,14 +16,13 @@ function SalaChats() {
     <Container className="d-flex align-items-center justify-content-center vh-100">
       <div className="text-center">
         <h1>Selecciona un chat</h1>
-        <Button variant="primary" size="lg" onClick={redireccion1} className="mt-4">
+        <Button
+          variant="primary"
+          size="lg"
+          onClick={redireccion1}
+          className="mt-4"
+        >
           Chat 1
-        </Button>
-        <Button variant="primary" size="lg" onClick={redireccion2} className="mt-3">
-          Chat 2
-        </Button>
-        <Button variant="primary" size="lg" onClick={redireccion3} className="mt-3">
-          Chat 3
         </Button>
       </div>
     </Container>
