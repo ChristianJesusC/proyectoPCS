@@ -1,19 +1,27 @@
-import React, { useState } from "react";
-import estiloLogin from "../css/login.css";
+import React, { useState, useEffect } from "react";
+import "../css/login.css";
 import { Footer } from "./componentes/FooterWB";
 import axios from "axios";
 
 const Login = () => {
   const [correo, setEmail] = useState("");
   const [contrasena, setPassword] = useState("");
+  const nombre = localStorage.getItem("nombre")
+
   const handleEmailChange = (event) => {
     setEmail(event.target.value);
   };
 
+
+  useEffect(()=>{
+    if(nombre !== null){
+      window.location.href = "/inicio"
+    }
+  },[])
   const handlePasswordChange = (event) => {
     setPassword(event.target.value);
   };
-
+  
   const handleSubmit = async () => {
     try {
       const response = await axios.post("http://localhost:3300/usuarios/login",{

@@ -119,7 +119,7 @@ const PiedraPapelTijeras = () => {
                   Reiniciar
                 </button>
                 <button className="button" onClick={handleClick}>
-                  Otra Acción
+                  Tabla de puntaje
                 </button>
               </div>
             )}
