@@ -1,21 +1,19 @@
-import React, { useEffect, useState } from 'react';
-import { Button } from 'react-bootstrap';
-import 'bootstrap/dist/css/bootstrap.min.css';
-import { Footer } from './componentes/FooterWB';
-import estilos from "../css/estilos.css"
+import "bootstrap/dist/css/bootstrap.min.css";
+import { Footer } from "./componentes/FooterWB";
+import Header from "./componentes/HeaderWB";
+import { useEffect, useState } from "react";
 
 const Inicio = () => {
-
-
-  const redireccional = () => {
-    window.location.href = '/chat';
-  };
-
+  const nombre=localStorage.getItem("nombre")
+  useEffect(()=>{
+    if(nombre === null){
+      window.location.href = "/"
+    }
+  },[])
   return (
     <div>
-      <p/>
-      <Button type="button" class="btn btn-primary btn-lg" onClick={redireccional}>Chat Global</Button>
-      <Footer/>
+      <Header />
+      <Footer />
     </div>
   );
 };

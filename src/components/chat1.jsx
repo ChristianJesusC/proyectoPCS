@@ -4,6 +4,7 @@ import { io } from "socket.io-client";
 import estiloChat from "../css/chat.css";
 import moment from "moment";
 import axios from "axios";
+import Header from "./componentes/HeaderWB";
 
 const socket = io("http://localhost:3300");
 
@@ -13,6 +14,12 @@ function Chat() {
   const [conectado, setConectado] = useState();
   const nombre = localStorage.getItem("nombre");
 
+  useEffect(()=>{
+    if(nombre === null){
+      window.location.href = "/"
+    }
+  },[])
+  
   useEffect(() => {
     socket.on("connect", () => setConectado(true));
 
@@ -49,6 +56,7 @@ function Chat() {
 
   return (
     <div>
+      <Header/>
       <div className="chat">
         {mensajes.map((mensaje) => (
           <p

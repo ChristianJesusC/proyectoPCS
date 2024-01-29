@@ -52,7 +52,7 @@ const Login = () => {
             onChange={handlePasswordChange}
           />
         </div>
-        <button className="login-boton" onClick={handleSubmit}>
+        <button className="login-boton"  onClick={handleSubmit}>
           Iniciar sesión
         </button>
         <p className="login-link">
