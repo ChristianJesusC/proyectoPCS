@@ -9,6 +9,7 @@ import PiedraPapel from "./components/PiedraPapel.jsx"
 import SalaChats from './components/SalaChats.jsx';
 import TablaPuntaje from './components/componentes/TablaPuntaje.jsx';
 import Chat2 from './components/chat2.jsx';
+import Agenda from './components/componentes/Agenda.jsx';
 
 function App() {
   return (
@@ -23,6 +24,7 @@ function App() {
           <Route path='/chat2' element={<Chat2/>}/>
           <Route path='/juego' element={<PiedraPapel/>}/>
           <Route path='/tabla' element={<TablaPuntaje/>}/>
+          <Route path='/agenda' element={<Agenda/>}/>
         </Routes>
       </Router>
     </div>

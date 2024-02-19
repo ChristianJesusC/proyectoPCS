@@ -23,6 +23,9 @@ const Header = () => {
             <a href="/juego">Juego</a>
           </li>
           <li>
+            <a href="/agenda">Agenda</a>
+          </li>
+          <li>
             <a onClick={salirSesion} href="/">
               Salir sesión
             </a>

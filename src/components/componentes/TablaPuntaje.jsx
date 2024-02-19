@@ -22,7 +22,7 @@ const LongPollingExample = () => {
   useEffect(() => {
     const obtenerNotificacionNueva = async () => {
       try {
-        const res = await fetch("http://localhost:3300/puntaje");
+        const res = await fetch("http://localhost:3300/puntaje/visualizar");
         const data = await res.json();
         if (data.length > puntajes.length) {
           const nuevosPuntajes = data.slice(puntajes.length);

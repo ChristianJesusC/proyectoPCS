@@ -12,7 +12,6 @@ const PiedraPapelTijeras = () => {
   const [puntaje, setPuntaje] = useState(0);
   const [perdio, setPerdio] = useState(false);
   const nombreUsuario = localStorage.getItem("nombre");
-  const [showModal, setShowModal] = useState(false);
 
   const handleClick = () => {
     if (puntaje > 0) {
@@ -25,15 +24,14 @@ const PiedraPapelTijeras = () => {
     if (nombreUsuario === null) {
       window.location.href = "/";
     }
-  }, []);
+  });
 
-  const guardarPuntajeEnBD = (nombre) => {
+  const guardarPuntajeEnBD = async() => {
     const datosJugador = {
       nombre: nombreUsuario,
       puntaje: puntaje,
     };
-    axios
-      .post("http://localhost:3300/puntaje/guardar", datosJugador)
+    axios.post("http://localhost:3300/puntaje/guardar", datosJugador)
       .then((response) => {
         console.log("Puntaje guardado en la base de datos");
       })
@@ -81,7 +79,6 @@ const PiedraPapelTijeras = () => {
     setPuntaje(0);
     setPerdio(false);
   };
-  const redireccionarMarcador = () => {};
   useEffect(() => {
     if (resultado !== null) {
       setTimeout(() => {
