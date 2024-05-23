@@ -2,8 +2,29 @@ import React, { useEffect } from "react";
 import axios from "axios";
 import Header from "./HeaderWB";
 import "./css/tablaAgendas.css"
-
+import { jwtDecode } from 'jwt-decode';
 function Agenda() {
+
+  useEffect(() => {
+    const token = localStorage.getItem('token');
+    if (!token || isTokenExpired(token)) {
+      localStorage.removeItem('token');
+      localStorage.removeItem('nombre');
+      window.location.href = "/";
+    }
+  });
+
+
+function isTokenExpired(token) {
+  try {
+    const decodedToken = jwtDecode(token);
+    const expirationDate = decodedToken.exp * 1000;
+    return expirationDate < new Date().getTime();
+  } catch {
+    return true;
+  }
+}
+
   useEffect(() => {
     const notificaciones = document.getElementById("notificaciones");
 

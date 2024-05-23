@@ -1,9 +1,11 @@
 import React, { useState, useEffect } from "react";
 import "../css/juego.css";
 import Header from "./componentes/HeaderWB";
+import { jwtDecode } from 'jwt-decode';
 
 const PiedraPapelTijeras = () => {
   const socket = new WebSocket("ws://localhost:3300");
+
   const opciones = ["piedra", "papel", "tijeras"];
   const [jugador, setJugador] = useState(null);
   const [computadora, setComputadora] = useState(null);
@@ -12,6 +14,26 @@ const PiedraPapelTijeras = () => {
   const [puntaje, setPuntaje] = useState(0);
   const [perdio, setPerdio] = useState(false);
   const nombreUsuario = localStorage.getItem("nombre");
+
+  useEffect(() => {
+    const token = localStorage.getItem('token');
+    if (!token || isTokenExpired(token)) {
+      localStorage.removeItem('token');
+      localStorage.removeItem('nombre');
+      window.location.href = "/";
+    }
+  });
+
+
+function isTokenExpired(token) {
+  try {
+    const decodedToken = jwtDecode(token);
+    const expirationDate = decodedToken.exp * 1000;
+    return expirationDate < new Date().getTime();
+  } catch {
+    return true;
+  }
+}
 
   const handleClick = () => {
     if (puntaje > 0) {

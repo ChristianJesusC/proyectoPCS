@@ -24,13 +24,14 @@ const Login = () => {
   
   const handleSubmit = async () => {
     try {
-      const response = await axios.post("http://localhost:3300/usuarios/login",{
+      const response = await axios.post("http://localhost:3300/usuario/login",{
           correo: correo,
           contrasena: contrasena,
         }
       );
       if (response.data) {
         localStorage.setItem("nombre",response.data.nombre)
+        localStorage.setItem("token",response.data.token)
         window.location.href = "/inicio";
       } else {
         alert("Error de autenticación");

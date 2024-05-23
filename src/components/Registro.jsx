@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import estiloRegistro from "../css/registro.css";
+import "../css/registro.css";
 import axios from "axios";
 
 export default function Registro() {
@@ -15,7 +15,7 @@ export default function Registro() {
       contrasena,
     };
 
-    axios.post("http://localhost:3300/usuarios/crear", datosRegistro)
+    axios.post("http://localhost:3300/usuario/crear", datosRegistro)
       .then((respuesta) => {
         console.log(respuesta.data);
         alert("Registro realizado exitosamente");
