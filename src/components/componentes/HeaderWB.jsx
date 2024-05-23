@@ -17,9 +17,6 @@ const Header = () => {
             <a href="/inicio">Inicio</a>
           </li>
           <li>
-            <a href="/salaChat">Chats</a>
-          </li>
-          <li>
             <a href="/juego">Juego</a>
           </li>
           <li>

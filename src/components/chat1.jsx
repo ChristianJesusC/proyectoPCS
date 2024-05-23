@@ -1,14 +1,18 @@
-import { useEffect, useRef, useState } from "react";
+/*import { useEffect, useRef, useState } from "react";
 import { Button } from "react-bootstrap";
 import { io } from "socket.io-client";
 import estiloChat from "../css/chat.css";
 import moment from "moment";
 import axios from "axios";
-import Header from "./componentes/HeaderWB";
+import Header from "./componentes/HeaderWB";*/
 
-const socket = io("http://localhost:3300/chatGlobal");
+//const socket = io("http://localhost:3300/chatGlobal");
 
-function Chat() {
+function Chat(params) {
+  
+}
+
+/*function Chat() {
   const [nuevoMensaje, setNuevoMensaje] = useState("");
   const [mensajes, setMensajes] = useState([]);
   const [conectado, setConectado] = useState();
@@ -105,6 +109,6 @@ function Chat() {
       </div>
     </div>
   );
-}
+}*/
 
 export default Chat;

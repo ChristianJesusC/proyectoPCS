@@ -1,9 +1,9 @@
 import React, { useState, useEffect } from "react";
-import axios from "axios";
 import "../css/juego.css";
 import Header from "./componentes/HeaderWB";
 
 const PiedraPapelTijeras = () => {
+  const socket = new WebSocket("ws://localhost:3300");
   const opciones = ["piedra", "papel", "tijeras"];
   const [jugador, setJugador] = useState(null);
   const [computadora, setComputadora] = useState(null);
@@ -15,29 +15,51 @@ const PiedraPapelTijeras = () => {
 
   const handleClick = () => {
     if (puntaje > 0) {
-      guardarPuntajeEnBD();
+      enviarDatos()
     }
     window.location.href = "/tabla";
   };
 
   useEffect(() => {
-    if (nombreUsuario === null) {
+    socket.onopen = () => {
+      console.log('WebSocket connection opened');
+    };
+
+    socket.onclose = () => {
+      console.log('WebSocket connection closed');
+    };
+
+    socket.onerror = (error) => {
+      console.error('WebSocket error:', error);
+    };
+
+    socket.onmessage = (event) => {
+      console.log('Received message from WebSocket:', event.data);
+    };
+
+    return () => {
+      socket.close();
+    };
+  }, [socket]);
+
+  useEffect(() => {
+    if (nombreUsuario == null) {
       window.location.href = "/";
     }
   });
 
-  const guardarPuntajeEnBD = async() => {
-    const datosJugador = {
-      nombre: nombreUsuario,
-      puntaje: puntaje,
-    };
-    axios.post("http://localhost:3300/puntaje/guardar", datosJugador)
-      .then((response) => {
-        console.log("Puntaje guardado en la base de datos");
-      })
-      .catch((error) => {
-        console.log("Error al guardar el puntaje en la base de datos:", error);
-      });
+
+  const enviarDatos = () => {
+    if (socket.readyState === WebSocket.OPEN) {
+      const data = {
+        action: 'postPuntaje',
+        body: {
+          name: nombreUsuario,
+          value: puntaje
+        }
+      };
+      socket.send(JSON.stringify(data));
+    }
   };
 
   const jugar = (opcion) => {
@@ -70,7 +92,7 @@ const PiedraPapelTijeras = () => {
 
   const reiniciarJuego = () => {
     if (puntaje > 0) {
-      guardarPuntajeEnBD();
+      enviarDatos()
     }
     setJugador(null);
     setComputadora(null);

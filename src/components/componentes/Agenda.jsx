@@ -111,7 +111,7 @@ function Agenda() {
         <button type="submit">Guardar evento</button>
       </form>
       </div>
-      <h2>Agendas</h2>
+      <h2>Eventos</h2>
       <ul id="notificaciones" className="notificaciones-table"></ul>
       </div>
   );

@@ -1,13 +1,17 @@
-import { useEffect, useRef, useState } from "react";
+/*import { useEffect, useRef, useState } from "react";
 import { Button } from "react-bootstrap";
 import { io } from "socket.io-client";
 import moment from "moment";
 import axios from "axios";
-import Header from "./componentes/HeaderWB";
+import Header from "./componentes/HeaderWB";*/
 
-const socket = io("http://localhost:3300/chatA");
+//const socket = io("http://localhost:3300/chatA");
 
 function Chat2() {
+  
+}
+
+/*function Chat2() {
   const [nuevoMensaje, setNuevoMensaje] = useState("");
   const [mensajes, setMensajes] = useState([]);
   const [conectado, setConectado] = useState();
@@ -104,5 +108,5 @@ function Chat2() {
     </div>
   );
 }
-
+*/
 export default Chat2;
