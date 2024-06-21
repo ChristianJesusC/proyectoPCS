@@ -8,24 +8,18 @@ function Publicaciones() {
 
   const fetchPosts = async () => {
     try {
-      const response = await axios.get(
-        "http://localhost:3300/publicacion/visual"
-      );
-      setPosts(response.data);
+      const response = await fetch("http://localhost:3300/publicacion", {
+        method: "GET",
+        headers: {
+          "Content-Type": "application/json",
+        },
+      });
+      const parsedResponse = await response.json();
+      setPosts([...posts,parsedResponse.data]);
     } catch (error) {
       console.error("Error al obtener las publicaciones:", error);
     }
   };
-
-  useEffect(() => {
-    fetchPosts();
-    const interval = setInterval(() => {
-      fetchPosts();
-    }, 5000);
-    return () => {
-      clearInterval(interval);
-    };
-  }, []);
 
   const handlePostChange = (event) => {
     setPostText(event.target.value);
@@ -45,7 +39,7 @@ function Publicaciones() {
           "http://localhost:3300/publicacion/crear",
           publicacion
         );
-        setPosts((prevPosts) => [...prevPosts, response.data]);
+        setPosts([...posts, response.data]);
         setPostText("");
       } catch (error) {
         console.error("Error al guardar la publicación:", error);
@@ -53,15 +47,25 @@ function Publicaciones() {
     }
   };
 
+  useEffect(() => {
+    (async () => {
+      await fetchPosts();
+    })();
+
+    const source = new EventSource("http://localhost:3300/publicacion/visual");
+    source.onmessage = function (event) {
+      setPosts([...posts,JSON.parse(event.data)]);
+    };
+  }, []);
+
   return (
     <div className="container">
       <div className="post-box">
-        <form onSubmit={handlePostSubmit}>
+        <form onSubmit={(e) => handlePostSubmit(e)}>
           <textarea
             className="post-box__input"
             placeholder="Escribe tu publicación..."
-            value={postText}
-            onChange={handlePostChange}
+            onChange={(e) => handlePostChange(e)}
           ></textarea>
           <button className="post-box__submit-btn" type="submit">
             Publicar
@@ -70,7 +74,7 @@ function Publicaciones() {
       </div>
       <div className="post-container">
         {posts.map((post) => (
-          <div key={post._id} className="post-container__post">
+          <div key={post._id} className="post-container_post">
             <h3>{post.usuario}</h3>
             <p>{post.contenido}</p>
             <p>{post.fecha}</p>

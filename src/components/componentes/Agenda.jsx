@@ -2,29 +2,8 @@ import React, { useEffect } from "react";
 import axios from "axios";
 import Header from "./HeaderWB";
 import "./css/tablaAgendas.css"
-import { jwtDecode } from 'jwt-decode';
+
 function Agenda() {
-
-  useEffect(() => {
-    const token = localStorage.getItem('token');
-    if (!token || isTokenExpired(token)) {
-      localStorage.removeItem('token');
-      localStorage.removeItem('nombre');
-      window.location.href = "/";
-    }
-  });
-
-
-function isTokenExpired(token) {
-  try {
-    const decodedToken = jwtDecode(token);
-    const expirationDate = decodedToken.exp * 1000;
-    return expirationDate < new Date().getTime();
-  } catch {
-    return true;
-  }
-}
-
   useEffect(() => {
     const notificaciones = document.getElementById("notificaciones");
 
@@ -78,19 +57,11 @@ function isTokenExpired(token) {
     const fechaActual = obtenerFechaActual();
     const fechaInput = document.getElementById("fecha-input");
     fechaInput.min = fechaActual;
-    
-    const obtenerNotificacionNueva = async () => {
-      try {
-        const res = await axios.get("http://localhost:3300/agenda/nueva-agenda");
-        const data = res.data;
-        pintarNotificacion(data.notificacion);
-      } catch (error) {
-        console.log(error);
-      } finally {
-        obtenerNotificacionNueva();
-        console.log("nuevo");
-      }
-    };
+
+    const source = new EventSource("http://localhost:3300/agenda/nueva-agenda");
+    source.onmessage = function (event) {
+      pintarNotificacion(JSON.parse(event.data));
+    }
 
     const enviarNotificacion = async (fecha,usuario,mensaje) => {
       try {
@@ -117,7 +88,6 @@ function isTokenExpired(token) {
       });
 
     obtenerNotificaciones();
-    obtenerNotificacionNueva();
   });
 
   return (
@@ -138,4 +108,4 @@ function isTokenExpired(token) {
   );
 }
 
-export default Agenda;
+export default Agenda;

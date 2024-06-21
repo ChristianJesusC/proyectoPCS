@@ -17,14 +17,14 @@ const Login = () => {
     if(nombre !== null){
       window.location.href = "/inicio"
     }
-  },[])
+  })
   const handlePasswordChange = (event) => {
     setPassword(event.target.value);
   };
   
   const handleSubmit = async () => {
     try {
-      const response = await axios.post("http://localhost:3300/usuario/login",{
+      const response = await axios.post(`http://localhost:3300/usuario/login`,{
           correo: correo,
           contrasena: contrasena,
         }

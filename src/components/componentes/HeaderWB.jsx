@@ -23,6 +23,9 @@ const Header = () => {
             <a href="/agenda">Agenda</a>
           </li>
           <li>
+            <a href="/wh">WebHooks</a>
+          </li>
+          <li>
             <a onClick={salirSesion} href="/">
               Salir sesión
             </a>

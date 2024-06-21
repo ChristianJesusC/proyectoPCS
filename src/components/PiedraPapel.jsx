@@ -62,7 +62,7 @@ function isTokenExpired(token) {
     return () => {
       socket.close();
     };
-  }, [socket]);
+  },);
 
   useEffect(() => {
     if (nombreUsuario == null) {

@@ -8,6 +8,7 @@ export const Footer = () => {
         <div className="my-row">
           <div className="my-col-12 text-center">
             <h3>Christian Jesús Chiu Valdivieso</h3>
+            <h3>Julio Meza Gonzalez</h3>
             <p>Copyright © 2024. Todos los derechos reservados.</p>
           </div>
         </div>

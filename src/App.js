@@ -10,6 +10,7 @@ import SalaChats from './components/SalaChats.jsx';
 import TablaPuntaje from './components/componentes/TablaPuntaje.jsx';
 import Chat2 from './components/chat2.jsx';
 import Agenda from './components/componentes/Agenda.jsx';
+import WebHooks from './components/WebHoooks.jsx';
 
 function App() {
   return (
@@ -25,6 +26,7 @@ function App() {
           <Route path='/juego' element={<PiedraPapel/>}/>
           <Route path='/tabla' element={<TablaPuntaje/>}/>
           <Route path='/agenda' element={<Agenda/>}/>
+          <Route path='/wh' element={<WebHooks/>}/>
         </Routes>
       </Router>
     </div>
