@@ -5,7 +5,7 @@ import { jwtDecode } from "jwt-decode";
 
 const LongPollingExample = () => {
   const [puntajes, setPuntajes] = useState([]);
-  const socket = new WebSocket("ws://localhost:3300");
+  const [socket,setSockets] = useState(null);
 
   useEffect(() => {
     const token = localStorage.getItem("token");
@@ -14,6 +14,57 @@ const LongPollingExample = () => {
       localStorage.removeItem("nombre");
       window.location.href = "/";
     }
+
+    function setNewWebsockets(message) {
+      console.log(message);
+      const newSocket = new WebSocket("ws://localhost:3300");
+      newSocket.onopen = () => {
+        console.log('conexion a websockets inicializada');
+        setSockets(socket);
+        newSocket.send(
+          JSON.stringify({
+            action: "getPuntajes",
+          })
+        );
+      };
+    
+      newSocket.onmessage = (key) => {
+        const dataJson = JSON.parse(key.data);
+        switch (dataJson.key) {
+          case "puntajes":
+            setPuntajes([]);
+            setPuntajes(dataJson.data);
+            break;
+          case "newPuntaje":
+            setPuntajes([]);
+            setPuntajes(dataJson.data);
+            break;
+          default:
+            console.log("ERROR");
+            break;
+        }
+      };
+
+      newSocket.onclose = () => {
+        setTimeout(() => setNewWebsockets('la conexion a websockets ha sido cerrada, intentando reconectar'), 1500);
+      }
+
+      newSocket.onerror = () => {
+        console.log('error en la conexion con websockets');
+        newSocket.close();
+      }
+    }
+
+    if (!socket) {
+      setNewWebsockets('iniciando la conexion con websockets');
+    }
+
+    return () => {
+      if (socket) {
+        socket.close();
+      }
+    }
+
   });
 
   function expiracionToken(token) {
@@ -25,30 +76,6 @@ const LongPollingExample = () => {
       return true;
     }
   }
-  socket.onopen = () => {
-    socket.send(
-      JSON.stringify({
-        action: "getPuntajes",
-      })
-    );
-  };
-
-  socket.onmessage = (key) => {
-    const dataJson = JSON.parse(key.data);
-    switch (dataJson.key) {
-      case "puntajes":
-        setPuntajes([]);
-        setPuntajes(dataJson.data);
-        break;
-      case "newPuntaje":
-        setPuntajes([]);
-        setPuntajes(dataJson.data);
-        break;
-      default:
-        console.log("ERROR");
-        break;
-    }
-  };
 
   return (
     <div>
@@ -62,12 +89,12 @@ const LongPollingExample = () => {
             </tr>
           </thead>
           <tbody>
-            {puntajes.map((puntaje, index) => (
+            {puntajes ? puntajes.map((puntaje, index) => (
               <tr key={index}>
                 <td>{puntaje.nombre}</td>
                 <td>{puntaje.puntaje}</td>
               </tr>
-            ))}
+            )) : null}
           </tbody>
         </table>
       </div>

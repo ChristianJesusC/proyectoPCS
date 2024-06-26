@@ -4,7 +4,6 @@ import Header from "./componentes/HeaderWB";
 import { jwtDecode } from 'jwt-decode';
 
 const PiedraPapelTijeras = () => {
-  const socket = new WebSocket("ws://localhost:3300");
 
   const opciones = ["piedra", "papel", "tijeras"];
   const [jugador, setJugador] = useState(null);
@@ -15,12 +14,47 @@ const PiedraPapelTijeras = () => {
   const [perdio, setPerdio] = useState(false);
   const nombreUsuario = localStorage.getItem("nombre");
 
+  const [socket, setSocket] = useState(null);
+
   useEffect(() => {
     const token = localStorage.getItem('token');
     if (!token || isTokenExpired(token)) {
       localStorage.removeItem('token');
       localStorage.removeItem('nombre');
       window.location.href = "/";
+    }
+
+    function setNewWebsockets(message) {
+      const newSocket = new WebSocket("ws://localhost:3300");
+      console.log(message);
+      
+      newSocket.onopen = () => {
+        console.log('conexion a websockets inicializada');
+        setSocket(newSocket);
+      };
+
+      newSocket.onclose = () => {
+        setTimeout(() => setNewWebsockets('la conexion a websockets ha sido cerrada, intentando reconectar'), 1500);
+      };
+
+      newSocket.onerror = (error) => {
+        console.error('WebSocket error:', error);
+        newSocket.close();
+      };
+
+      newSocket.onmessage = (event) => {
+        console.log('Received message from WebSocket:', event.data);
+      };
+    }
+
+    if (!socket) {
+      setNewWebsockets('WebSocket connection opened');
+    }
+
+    return () => {
+      if (socket) {
+        socket.close();
+      }
     }
   });
 
@@ -41,28 +75,6 @@ function isTokenExpired(token) {
     }
     window.location.href = "/tabla";
   };
-
-  useEffect(() => {
-    socket.onopen = () => {
-      console.log('WebSocket connection opened');
-    };
-
-    socket.onclose = () => {
-      console.log('WebSocket connection closed');
-    };
-
-    socket.onerror = (error) => {
-      console.error('WebSocket error:', error);
-    };
-
-    socket.onmessage = (event) => {
-      console.log('Received message from WebSocket:', event.data);
-    };
-
-    return () => {
-      socket.close();
-    };
-  },);
 
   useEffect(() => {
     if (nombreUsuario == null) {

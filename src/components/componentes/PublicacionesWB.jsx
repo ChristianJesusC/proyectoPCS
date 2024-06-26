@@ -15,7 +15,7 @@ function Publicaciones() {
         },
       });
       const parsedResponse = await response.json();
-      setPosts([...posts,parsedResponse.data]);
+      setPosts((prevPosts)=>[...prevPosts,...parsedResponse.data]);
     } catch (error) {
       console.error("Error al obtener las publicaciones:", error);
     }
@@ -35,11 +35,10 @@ function Publicaciones() {
       };
 
       try {
-        const response = await axios.post(
+        await axios.post(
           "http://localhost:3300/publicacion/crear",
           publicacion
         );
-        setPosts([...posts, response.data]);
         setPostText("");
       } catch (error) {
         console.error("Error al guardar la publicación:", error);
@@ -54,7 +53,7 @@ function Publicaciones() {
 
     const source = new EventSource("http://localhost:3300/publicacion/visual");
     source.onmessage = function (event) {
-      setPosts([...posts,JSON.parse(event.data)]);
+      setPosts((prevPosts)=>[...prevPosts,JSON.parse(event.data)]);
     };
   }, []);
 
@@ -73,8 +72,8 @@ function Publicaciones() {
         </form>
       </div>
       <div className="post-container">
-        {posts.map((post) => (
-          <div key={post._id} className="post-container_post">
+        {posts.map((post,index) => (
+          <div key={index} className="post-container_post">
             <h3>{post.usuario}</h3>
             <p>{post.contenido}</p>
             <p>{post.fecha}</p>
