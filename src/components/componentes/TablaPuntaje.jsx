@@ -2,10 +2,12 @@ import React, { useState, useEffect } from "react";
 import "../../css/tablaPuntaje.css";
 import Header from "./HeaderWB";
 import { jwtDecode } from "jwt-decode";
+import Swal from "sweetalert2";
 
 const LongPollingExample = () => {
   const [puntajes, setPuntajes] = useState([]);
-  const [socket,setSockets] = useState(null);
+  const [socket, setSockets] = useState(null);
+  const [isConnected, setIsConnected] = useState(false);
 
   useEffect(() => {
     const token = localStorage.getItem("token");
@@ -19,7 +21,13 @@ const LongPollingExample = () => {
       console.log(message);
       const newSocket = new WebSocket("ws://localhost:3300");
       newSocket.onopen = () => {
-        console.log('conexion a websockets inicializada');
+        setIsConnected(true);
+        Swal.fire({
+          icon: "success",
+          title: "Conexión realizado",
+          showConfirmButton: false,
+          timer: 5000,
+        });
         setSockets(socket);
         newSocket.send(
           JSON.stringify({
@@ -27,7 +35,7 @@ const LongPollingExample = () => {
           })
         );
       };
-    
+
       newSocket.onmessage = (key) => {
         const dataJson = JSON.parse(key.data);
         switch (dataJson.key) {
@@ -46,26 +54,36 @@ const LongPollingExample = () => {
       };
 
       newSocket.onclose = () => {
-        setTimeout(() => setNewWebsockets('la conexion a websockets ha sido cerrada, intentando reconectar'), 1500);
-      }
+        setIsConnected(false);
+        setTimeout(
+          () =>
+            setNewWebsockets(
+              "la conexion a websockets ha sido cerrada, intentando reconectar"
+            ),
+          2500
+        );
+      };
 
       newSocket.onerror = () => {
-        console.log('error en la conexion con websockets');
+        Swal.fire({
+          icon: "error",
+          title: "Oops...",
+          text: "error en la conexion con websockets!",
+        });
         newSocket.close();
-      }
+      };
     }
 
     if (!socket) {
-      setNewWebsockets('iniciando la conexion con websockets');
+      setNewWebsockets("iniciando la conexion con websockets");
     }
 
     return () => {
       if (socket) {
         socket.close();
       }
-    }
-
-  });
+    };
+  },[]);
 
   function expiracionToken(token) {
     try {
@@ -89,12 +107,14 @@ const LongPollingExample = () => {
             </tr>
           </thead>
           <tbody>
-            {puntajes ? puntajes.map((puntaje, index) => (
-              <tr key={index}>
-                <td>{puntaje.nombre}</td>
-                <td>{puntaje.puntaje}</td>
-              </tr>
-            )) : null}
+            {puntajes
+              ? puntajes.map((puntaje, index) => (
+                  <tr key={index}>
+                    <td>{puntaje.nombre}</td>
+                    <td>{puntaje.puntaje}</td>
+                  </tr>
+                ))
+              : null}
           </tbody>
         </table>
       </div>
