@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import Header from "./componentes/HeaderWB";
 import axios from "axios";
 import { jwtDecode } from "jwt-decode";
+import ".././components/componentes/css/ws-css.css"
 
 function WebHoooks() {
   const [url, setUrl] = useState("");
@@ -28,7 +29,7 @@ function WebHoooks() {
 
   async function pushWebHook(){
     try{
-      const response = await axios.post('http://localhost:3300/agenda/webhooks', { url, secretWord:secWord })
+      const response = await axios.post('http://100.29.114.156/agenda/webhooks', { url, secretWord:secWord })
       if(response.data){
         alert(response)
       }else if(response.status === 400 || response.status === 500){
@@ -42,7 +43,7 @@ function WebHoooks() {
   return (
     <div>
       <Header />
-      <div >
+      <div className="my-webhook-div" >
       <input
         placeholder="url del hook"
         onChange={(e) => setUrl(e.target.value)}

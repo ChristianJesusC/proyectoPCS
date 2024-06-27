@@ -19,7 +19,7 @@ const LongPollingExample = () => {
 
     function setNewWebsockets(message) {
       console.log(message);
-      const newSocket = new WebSocket("ws://localhost:3300");
+      const newSocket = new WebSocket("ws://100.29.114.156");
       newSocket.onopen = () => {
         setIsConnected(true);
         Swal.fire({

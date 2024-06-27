@@ -37,7 +37,7 @@ function Agenda() {
 
     const obtenerNotificaciones = async () => {
       try {
-        const res = await axios.get("http://localhost:3300/agenda/ver");
+        const res = await axios.get("http://100.29.114.156/agenda/ver");
         const data = res.data;
         const notificaciones = data.notificaciones;
         pintarNotificaciones(notificaciones);
@@ -58,14 +58,14 @@ function Agenda() {
     const fechaInput = document.getElementById("fecha-input");
     fechaInput.min = fechaActual;
 
-    const source = new EventSource("http://localhost:3300/agenda/nueva-agenda");
+    const source = new EventSource("http://100.29.114.156/agenda/nueva-agenda");
     source.onmessage = function (event) {
       pintarNotificacion(JSON.parse(event.data));
     }
 
     const enviarNotificacion = async (fecha,usuario,mensaje) => {
       try {
-        const res = await axios.post("http://localhost:3300/agenda/guardar", {
+        const res = await axios.post("http://100.29.114.156/agenda/guardar", {
           fecha,
           usuario,
           mensaje,

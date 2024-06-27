@@ -15,7 +15,7 @@ export default function Registro() {
       contrasena,
     };
 
-    axios.post("http://localhost:3300/usuario/crear", datosRegistro)
+    axios.post("http://100.29.114.156/usuario/crear", datosRegistro)
       .then((respuesta) => {
         console.log(respuesta.data);
         alert("Registro realizado exitosamente");

@@ -7,7 +7,7 @@ const Login = () => {
   const [correo, setEmail] = useState("");
   const [contrasena, setPassword] = useState("");
   const nombre = localStorage.getItem("nombre")
-
+  
   const handleEmailChange = (event) => {
     setEmail(event.target.value);
   };
@@ -24,7 +24,7 @@ const Login = () => {
   
   const handleSubmit = async () => {
     try {
-      const response = await axios.post(`http://localhost:3300/usuario/login`,{
+      const response = await axios.post(`http://100.29.114.156/usuario/login`,{
           correo: correo,
           contrasena: contrasena,
         }

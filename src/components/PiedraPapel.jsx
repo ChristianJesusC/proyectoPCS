@@ -13,6 +13,7 @@ const PiedraPapelTijeras = () => {
   const [puntaje, setPuntaje] = useState(0);
   const [perdio, setPerdio] = useState(false);
   const nombreUsuario = localStorage.getItem("nombre");
+  const [conectado,setConectado]=useState(false)
 
   const [socket, setSocket] = useState(null);
 
@@ -23,18 +24,19 @@ const PiedraPapelTijeras = () => {
       localStorage.removeItem('nombre');
       window.location.href = "/";
     }
-
     function setNewWebsockets(message) {
-      const newSocket = new WebSocket("ws://localhost:3300");
+      const newSocket = new WebSocket("ws://100.29.114.156");
       console.log(message);
       
       newSocket.onopen = () => {
+        setConectado(true)
         console.log('conexion a websockets inicializada');
         setSocket(newSocket);
       };
 
       newSocket.onclose = () => {
-        setTimeout(() => setNewWebsockets('la conexion a websockets ha sido cerrada, intentando reconectar'), 1500);
+        setConectado(false)
+        setTimeout(() => setNewWebsockets('la conexion a websockets ha sido cerrada, intentando reconectar'), 2500);
       };
 
       newSocket.onerror = (error) => {
@@ -56,7 +58,7 @@ const PiedraPapelTijeras = () => {
         socket.close();
       }
     }
-  });
+  },[]);
 
 
 function isTokenExpired(token) {

@@ -5,10 +5,9 @@ import "./css/publicaciones.css";
 function Publicaciones() {
   const [postText, setPostText] = useState("");
   const [posts, setPosts] = useState([]);
-
   const fetchPosts = async () => {
     try {
-      const response = await fetch("http://localhost:3300/publicacion", {
+      const response = await fetch("http://100.29.114.156/publicacion", {
         method: "GET",
         headers: {
           "Content-Type": "application/json",
@@ -36,7 +35,7 @@ function Publicaciones() {
 
       try {
         await axios.post(
-          "http://localhost:3300/publicacion/crear",
+          "http://100.29.114.156/publicacion/crear",
           publicacion
         );
         setPostText("");
@@ -51,7 +50,7 @@ function Publicaciones() {
       await fetchPosts();
     })();
 
-    const source = new EventSource("http://localhost:3300/publicacion/visual");
+    const source = new EventSource("http://100.29.114.156/publicacion/visual");
     source.onmessage = function (event) {
       setPosts((prevPosts)=>[...prevPosts,JSON.parse(event.data)]);
     };
